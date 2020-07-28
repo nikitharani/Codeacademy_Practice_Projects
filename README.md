@@ -18,3 +18,5 @@ b) cho-Han
 c) random picking card
 d) roulette 
 
+## Become a pokemon master(python)
+Here in this project, trainer and pokemon classes are implemented. The trainer with his pokemon attacks another trainer's pokemon. 
