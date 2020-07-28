@@ -269,5 +269,5 @@ if __name__ == "__main__":
     Cards(10)
 
     # Roulette game demo
-    Roulette("00", 50)
+    Roulette("red", 50)
 
