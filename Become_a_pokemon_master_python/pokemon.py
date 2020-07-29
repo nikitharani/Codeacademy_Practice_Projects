@@ -1,18 +1,20 @@
 # The following python code is a part of codeacademy project work
 
-class Pokemon:
+class Pokemon: 
     # To create a pokemon, give it a name, type, and level. Its max health is determined by its level. Its starting health is its max health and it is not knocked out when it starts.
-    def __init__(self, name, type, level = 5):
-        self.name = name
-        self.level = level
-        self.max_health = level * 5
+    #this method is used to intialise a newly created object.it is called every time the class instantiated.
+    def __init__(self, pokemon_name, pokemon_type, pokemon_level = 5):
+        self.name = pokemon_name
+        self.level = pokemon_level
+        self.max_health = pokemon_level * 5
         self.current_health = self.max_health
-        self.type = type
+        self.type = pokemon_type
         self.is_knocked_out = False
 
 
     def __repr__(self):
         # Printing a pokemon will tell you its name, its type, its level and how much health it has remaining
+        #dunder method we can tell python what we want the string representation of the class to be.
         return "{name} - This is a level {level} pokemon, has {current_health} health points remaining. This pokemon belongs to {type} type".format(name = self.name, level = self.level, current_health=self.current_health, type = self.type)
 
     def revive(self):
@@ -56,7 +58,7 @@ class Pokemon:
         # Checks to make sure the pokemon isn't knocked out
         if self.is_knocked_out:
             print("Attack! - {name} can't attack because it is knocked out!".format(name = self.name))
-            return
+            
         # If the pokemon attacking has a disadvantage, then it deals damage equal to half its level to the other pokemon
         if (self.type == "Fire" and other_pokemon.type == "Water") or\
                 (self.type == "Water" and other_pokemon.type == "Grass") or\
@@ -143,10 +145,15 @@ if __name__ == "__main__":
     print(trainer_one)
     print(trainer_two)
 
-    # Testing attacking, giving potions, and switching pokemon.
+    ## Testing attacking, giving potions, and switching pokemon.
+    # round-1 
     trainer_one.attack_other_trainer(trainer_two)
     trainer_two.attack_other_trainer(trainer_one)
+
     trainer_two.use_potion()
+
+    # round-2
     trainer_one.attack_other_trainer(trainer_two)
     trainer_two.switch_active_pokemon(0)
     trainer_two.switch_active_pokemon(1)
+    trainer_two.attack_other_trainer(trainer_one)
