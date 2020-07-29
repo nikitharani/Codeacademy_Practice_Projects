@@ -17,14 +17,6 @@ class Pokemon:
         #dunder method we can tell python what we want the string representation of the class to be.
         return "{name} - This is a level {level} pokemon, has {current_health} health points remaining. This pokemon belongs to {type} type".format(name = self.name, level = self.level, current_health=self.current_health, type = self.type)
 
-    def revive(self):
-        # Reviving a pokemon will flip it's status to False
-        self.is_knocked_out = False
-        # A revived pokemon can't have 0 health. This is a safety precaution. revive() should only be called if the pokemon was given some health, but if it somehow has no health, its health gets set to 1.
-        if self.current_health == 0:
-            self.current_health = 1
-        print("Revive! - {name} was revived!".format(name = self.name))
-
     def knock_out(self):
         # Knocking out a pokemon will flip its status to True.
         self.is_knocked_out = True
@@ -44,10 +36,7 @@ class Pokemon:
             print("----> {name} now has {current_health} health.".format(name = self.name, current_health = self.current_health))
 
     def gain_health(self, amount):
-        # Adds to a pokemon's heath
-        # If a pokemon goes from 0 heath, then revive it
-        if self.current_health == 0:
-            self.revive()
+        # Adds to a pokemon's heath        
         self.current_health += amount
         # Makes sure the heath does not go over the max health
         if self.current_health >= self.max_health:
@@ -63,64 +52,69 @@ class Pokemon:
         if (self.type == "Fire" and other_pokemon.type == "Water") or\
                 (self.type == "Water" and other_pokemon.type == "Grass") or\
                 (self.type == "Grass" and other_pokemon.type == "Fire"):
-            print("Attack! - {my_name} attacked with {my_type} & {other_name} defended with {other_type} for {damage} damage.".format(my_name = self.name, my_type = self.type, other_name = other_pokemon.name, other_type=other_pokemon.type, damage = round(self.level * 0.5)))
+            print("Attack! - {my_name} attacked with {my_type} & {other_name} defended with {other_type} for {damage} damage.".format(my_name = self.name, \
+                my_type = self.type, other_name = other_pokemon.name, other_type=other_pokemon.type, damage = round(self.level * 0.5)))
             print("==> It's not very effective")
             other_pokemon.lose_health(round(self.level * 0.5))
         # If the pokemon attacking has neither advantage or disadvantage, then it deals damage equal to its level to the other pokemon
         if (self.type == other_pokemon.type):
-            print("Attack! - {my_name} attacked with {my_type} & {other_name} defended with {other_type} for {damage} damage.".format(my_name = self.name, my_type = self.type, other_name = other_pokemon.name, other_type=other_pokemon.type, damage = self.level))
+            print("Attack! - {my_name} attacked with {my_type} & {other_name} defended with {other_type} for {damage} damage.".format(my_name = self.name, \
+                my_type = self.type, other_name = other_pokemon.name, other_type=other_pokemon.type, damage = self.level))
             other_pokemon.lose_health(self.level)
         # If the pokemon attacking has advantage, then it deals damage equal to double its level to the other pokemon
-        if (self.type == "Fire" and other_pokemon.type == "Grass") or (self.type == "Water" and other_pokemon.type == "Fire") or (self.type == "Grass" and other_pokemon.type == "Water"):
-            print("Attack! - {my_name} attacked with {my_type} & {other_name} defended with {other_type} for {damage} damage.".format(my_name = self.name, my_type = self.type, other_name = other_pokemon.name, other_type=other_pokemon.type, damage = 2 *self.level))
+        if (self.type == "Fire" and other_pokemon.type == "Grass") or \
+            (self.type == "Water" and other_pokemon.type == "Fire") or \
+                (self.type == "Grass" and other_pokemon.type == "Water"):
+            print("Attack! - {my_name} attacked with {my_type} & {other_name} defended with {other_type} for {damage} damage.".format(my_name = self.name, \
+                my_type = self.type, other_name = other_pokemon.name, other_type=other_pokemon.type, damage = 2 *self.level))
             print("==> It's super effective")
             other_pokemon.lose_health(self.level * 2)
 
 class Trainer:
     # A trainer has a list of pokemon, a number of potions and a name. When the trainer gets created, the first pokemon in their list of pokemons is the active pokemon (number 0)
     def __init__(self, pokemon_list, num_potions, name):
-        self.pokemons = pokemon_list
-        self.potions = num_potions
+        self.pokemonsList = pokemon_list
+        self.Numpotions = num_potions
         self.current_pokemon = 0
         self.name = name
 
     def __repr__(self):
         # Prints the name of the trainer, the pokemon they currently have, and the current active pokemon.
         print("The trainer {name} has the following pokemon".format(name = self.name))
-        for pokemon in self.pokemons:
+        for pokemon in self.pokemonsList:
             print(pokemon)
-        print("The current active pokemon is {name}".format(name = self.pokemons[self.current_pokemon].name))
+        print("The current active pokemon is {name}".format(name = self.pokemonsList[self.current_pokemon].name))
         return "This is trainer - {name}".format(name = self.name)+"\n"+"============================================================="
 
     def switch_active_pokemon(self, new_active):
         # Switches the active pokemon to the number given as a parameter
         # First checks to see the number is valid (between 0 and the length of the list)
-        if new_active < len(self.pokemons) and new_active >= 0:
+        if new_active < len(self.pokemonsList) and new_active >= 0:
             # You can't switch to a pokemon that is knocked out
-            if self.pokemons[new_active].is_knocked_out:
-                print("Knock Out! - {name} is knocked out. You can't make it your active pokemon".format(name = self.pokemons[new_active].name))
+            if self.pokemonsList[new_active].is_knocked_out:
+                print("Knock Out! - {name} is knocked out. You can't make it your active pokemon".format(name = self.pokemonsList[new_active].name))
             # You can't switch to your current pokemon
             elif new_active == self.current_pokemon:
-                print("{name} is already your active pokemon".format(name = self.pokemons[new_active].name))
+                print("{name} is already your active pokemon".format(name = self.pokemonsList[new_active].name))
             # Switches the pokemon
             else:
                 self.current_pokemon = new_active
-                print("Go {name}, it's your turn!".format(name = self.pokemons[self.current_pokemon].name))
+                print("Go {name}, it's your turn!".format(name = self.pokemonsList[self.current_pokemon].name))
 
     def use_potion(self):
         # Uses a potion on the active pokemon, assuming you have at least one potion.
-        if self.potions > 0:
-            print("Using Potion! - You used a potion on {name}.".format(name = self.pokemons[self.current_pokemon].name))
+        if self.Numpotions > 0:
+            print("Using Potion! - You used a potion on {name}.".format(name = self.pokemonsList[self.current_pokemon].name))
             # A potion restores 20 health
-            self.pokemons[self.current_pokemon].gain_health(20)
-            self.potions -= 1
+            self.pokemonsList[self.current_pokemon].gain_health(20)
+            self.Numpotions -= 1
         else:
             print("You don't have any more potions")
 
     def attack_other_trainer(self, other_trainer):
         # Your current pokemon attacks the other trainer's current pokemon
-        my_pokemon = self.pokemons[self.current_pokemon]
-        their_pokemon = other_trainer.pokemons[other_trainer.current_pokemon]
+        my_pokemon = self.pokemonsList[self.current_pokemon]
+        their_pokemon = other_trainer.pokemonsList[other_trainer.current_pokemon]
         my_pokemon.attack(their_pokemon)
 
 if __name__ == "__main__":
@@ -154,6 +148,5 @@ if __name__ == "__main__":
 
     # round-2
     trainer_one.attack_other_trainer(trainer_two)
-    trainer_two.switch_active_pokemon(0)
     trainer_two.switch_active_pokemon(1)
     trainer_two.attack_other_trainer(trainer_one)
